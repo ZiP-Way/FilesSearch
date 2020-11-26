@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 
 namespace FilesSearch
 {
-    class SearchByDate: MainSearch
+    class SearchByDate: SearchController
     {
         private FileInfo[] files = new FileInfo[999];
         private DateTime fileDateTime;
 
-        private string directory = @"E:\TermPaper";
         private string header;
         private string text;
 
@@ -55,7 +54,7 @@ namespace FilesSearch
 
         private void SearchFiles()
         {
-            string[] allFoundFiles = Directory.GetFiles(directory, "*", SearchOption.AllDirectories);
+            string[] allFoundFiles = Directory.GetFiles(PathToFolder, "*", SearchOption.AllDirectories);
             if (allFoundFiles.Length != 0)
             {
                 isFileFounded = true;

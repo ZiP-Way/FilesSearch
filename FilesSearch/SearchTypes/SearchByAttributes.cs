@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace FilesSearch
 {
-    class SearchByAttributes: MainSearch
+    class SearchByAttributes: SearchController
     {
         private FileInfo[] files = new FileInfo[999];
         FileAttributes selectedAttribute;
-
         private string directory = @"E:\TermPaper";
         private string header;
         private string text;
@@ -72,6 +71,7 @@ namespace FilesSearch
                         amountReservedFiles++;
                     }
                     FindDuplicates(reserve, amountReservedFiles);
+                    break;
                 }
                 else
                 {

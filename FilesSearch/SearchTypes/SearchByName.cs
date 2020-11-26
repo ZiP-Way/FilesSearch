@@ -4,13 +4,12 @@ using System.Threading;
 
 namespace FilesSearch
 {
-    class SearchByName: MainSearch
+    class SearchByName: SearchController
     {
         private FileInfo[] files = new FileInfo[999];
 
-        private string directory = @"E:\TermPaper";
         private string fileName;
-
+        
         private int amountOfFiles = 0;
         private int selectedOption = 0;
 
@@ -65,7 +64,7 @@ namespace FilesSearch
 
         private void SearchFiles()
         {
-            string[] allFoundFiles = Directory.GetFiles(directory, fileName + "*", SearchOption.AllDirectories);
+            string[] allFoundFiles = Directory.GetFiles(PathToFolder, fileName + "*", SearchOption.AllDirectories);
             for (int index = 0; index < allFoundFiles.Length; index++)
             {
                 files[index] = new FileInfo(allFoundFiles[index]);

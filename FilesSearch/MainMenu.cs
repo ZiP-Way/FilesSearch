@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +8,7 @@ namespace FilesSearch
 {
     class MainMenu
     {
-        private string fileName;
-        private int fileSize;
-        private DateTime fileDateTime;
+        private SearchController search = new SearchController();
 
         private int selectedOption;
 
@@ -30,53 +28,17 @@ namespace FilesSearch
                     "Меню пошуку", 
                     "Про автора", 
                     "Вихід");
+                
                 if (selectedOption == 1)
                 {
-                    selectedOption = MenuBuilder.MultipleChoice(
-                        "", 
-                        "", 
-                        "Розширений пошук", 
-                        "Вибірковий пошук", 
-                        "Повернутися до меню");
-                    if (selectedOption == 0)
+                    if (!SearchController.IsPathSet)
                     {
-                        //WriteMenu();
-
-                        //fileName = FileNameInput();
-                        //fileSize = FileSizeInput();
-                        //fileDateTime = FileDateInput();
-                        //SelectFileAttributes();
+                        search.SetPathToFolder();
+                        SearchMenu();
                     }
-                    else if (selectedOption == 1)
+                    else if (SearchController.IsPathSet)
                     {
-                        selectedOption = MenuBuilder.MultipleChoice(
-                            "",
-                            "",
-                            "Пошук за іменем файла", 
-                            "Пошук за розміром файла", 
-                            "Пошук за датою створення файла",
-                            "Пошук за атрибутами файла");
-                        if(selectedOption == 0)
-                        {
-                            SearchByName searchByName = new SearchByName();
-                            searchByName.Display();
-                        }else if(selectedOption == 1)
-                        {
-                            SearchBySize searchBySize = new SearchBySize();
-                            searchBySize.Display();
-                        }else if(selectedOption == 2)
-                        {
-                            SearchByDate searchByDate = new SearchByDate();
-                            searchByDate.Display();
-                        }else if(selectedOption == 3)
-                        {
-                            SearchByAttributes searchByAttributes = new SearchByAttributes();
-                            searchByAttributes.Display();
-                        }
-                    }
-                    else if (selectedOption == 2)
-                    {
-                        ShowMenu();
+                        SearchMenu();
                     }
                 }
                 else if (selectedOption == 2)
@@ -105,51 +67,52 @@ namespace FilesSearch
                 Console.ReadKey();
             }
         }
-        //private void WriteMenu()
-        //{
-        //    Console.WriteLine(
-        //        $"Ім'я файлу: {fileName}" +
-        //        $"\nРозмір файлу: {fileSize}" +
-        //        $"\nДата створення: {fileDateTime}" +
-        //        "\nДодаткові атрибути: ");
-        //}
-        //private string FileNameInput()
-        //{
-        //    string fileName;
+        private void SearchMenu()
+        {
+            selectedOption = MenuBuilder.MultipleChoice(
+                            "Меню пошуку",
+                            "",
+                            "Розширений пошук",
+                            "Вибірковий пошук",
+                            "Повернутися до меню");
+            if (selectedOption == 0)
+            {
 
-        //    Console.SetCursorPosition(15, 0);
-        //    fileName = Console.ReadLine();
-
-        //    return fileName;
-        //}
-
-        //private int FileSizeInput()
-        //{
-        //    int fileSize;
-
-        //    Console.SetCursorPosition(15, 1);
-        //    fileSize = Convert.ToInt32(Console.ReadLine());
-
-        //    return fileSize;
-        //}
-
-        //private DateTime FileDateInput()
-        //{
-        //    DateTime fileDateTime;
-        //    string fileDate;
-
-        //    Console.SetCursorPosition(15, 2);
-        //    fileDate = Console.ReadLine();
-
-        //    string[] dates = fileDate.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
-        //    fileDateTime = new DateTime(Convert.ToInt32(dates[0]), Convert.ToInt32(dates[1]), Convert.ToInt32(dates[2]));
-
-        //    return fileDateTime;
-        //}
-
-        //private void SelectFileAttributes()
-        //{
-        //    MultipleChoice("Приховані файли", "Системні файли", "Файли тільки для читання", "Архівні файли", "Дублікати файлів", "Далі");
-        //}
+            }
+            else if (selectedOption == 1)
+            {
+                selectedOption = MenuBuilder.MultipleChoice(
+                    "",
+                    "",
+                    "Пошук за іменем файла",
+                    "Пошук за розміром файла",
+                    "Пошук за датою створення файла",
+                    "Пошук за атрибутами файла");
+                if (selectedOption == 0)
+                {
+                    SearchByName searchByName = new SearchByName();
+                    searchByName.Display();
+                }
+                else if (selectedOption == 1)
+                {
+                    SearchBySize searchBySize = new SearchBySize();
+                    searchBySize.Display();
+                }
+                else if (selectedOption == 2)
+                {
+                    SearchByDate searchByDate = new SearchByDate();
+                    searchByDate.Display();
+                }
+                else if (selectedOption == 3)
+                {
+                    SearchByAttributes searchByAttributes = new SearchByAttributes();
+                    searchByAttributes.Display();
+                }
+            }
+            else if (selectedOption == 2)
+            {
+                ShowMenu();
+            }
+        }
     }
 }
