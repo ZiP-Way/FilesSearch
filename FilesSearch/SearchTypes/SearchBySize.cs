@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FilesSearch
 {
-    class SearchBySize: SearchController
+    class SearchBySize : SearchController
     {
         private FileInfo[] files = new FileInfo[999];
 
@@ -19,11 +19,16 @@ namespace FilesSearch
 
         private bool isFileFounded = false;
 
+        private string strMinSize;
+        private string strMaxSize;
+
         private int minSize = 0;
         private int maxSize = 0;
 
         public void Display()
         {
+            MenuBuilder.WriteHeader("Пошук файлів за розміром");
+
             if (!isFileFounded)
             {
                 FileSizeInput();
@@ -56,15 +61,23 @@ namespace FilesSearch
 
         private void FileSizeInput()
         {
-            Console.WriteLine("Вкажіть розмір файлу.");
+            Console.WriteLine("\n @--> Вкажіть розмір файлу.");
 
-            Console.WriteLine("Від: ");
-            Console.WriteLine("До: ");
+            Console.WriteLine(" @--> Від: ");
+            Console.WriteLine(" @--> До: ");
 
-            Console.SetCursorPosition(10, 1);
-            minSize = Convert.ToInt32(Console.ReadLine());
-            Console.SetCursorPosition(10, 2);
-            maxSize = Convert.ToInt32(Console.ReadLine());
+            Console.SetCursorPosition(12, 4);
+            strMinSize = Console.ReadLine();
+
+            if (strMinSize == "") throw new Exception(ExceptionMessages.EmptyField);
+            else minSize = Convert.ToInt32(strMinSize);
+
+            Console.SetCursorPosition(12, 5);
+            strMaxSize = Console.ReadLine();
+
+            if (strMaxSize == "") maxSize = int.MaxValue;
+            else maxSize = Convert.ToInt32(strMaxSize);
+
 
             header = $"Пошук файлів за розміром: ~ Від: {minSize} б. До: {maxSize} б. ~";
         }
@@ -72,7 +85,7 @@ namespace FilesSearch
         private void SearchFiles()
         {
             string[] allFoundFiles = Directory.GetFiles(PathToFolder, "*", SearchOption.AllDirectories);
-            if(allFoundFiles.Length != 0)
+            if (allFoundFiles.Length != 0)
             {
                 isFileFounded = true;
             }

@@ -8,7 +8,7 @@ namespace FilesSearch
 {
     static class MenuBuilder
     {
-        static public int MultipleChoice(string header, string text, params string[] options)
+        static public int MultipleChoice(int x, int y, string header, string text, params string[] options)
         {
             int currentSelection = 0;
 
@@ -20,24 +20,25 @@ namespace FilesSearch
 
                 if (header != "")
                 {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine(header);
-                    Console.ResetColor();
+                    WriteHeader(header);
                 }
                 if (text != "")
                 {
-                    Console.WriteLine(text);
+                    Console.WriteLine($"{text}");
                 }
+
+
                 for (int i = 0; i < options.Length; i++)
                 {
+                    Console.SetCursorPosition(x, y+i);
                     if (i == currentSelection)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine(" -> \t" + options[i].ToUpper());
+                        Console.WriteLine($"~~~ {options[i].ToUpper()} ~~~");
                     }
                     else
                     {
-                        Console.WriteLine("\t" + options[i]);
+                        Console.WriteLine($"    {options[i]}");
                     }
 
                     Console.ResetColor();
@@ -63,6 +64,17 @@ namespace FilesSearch
             Console.Clear();
 
             return currentSelection;
+        }
+
+        static public void WriteHeader(string header)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("\n\t  === ===%");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($" {header} ");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("%=== ===");
+            Console.ResetColor();
         }
     }
 }

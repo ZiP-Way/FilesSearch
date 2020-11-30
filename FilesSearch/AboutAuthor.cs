@@ -19,7 +19,7 @@ namespace FilesSearch
         public AboutAuthor()
         {
             Console.CursorVisible = false;
-            colors[0] = ConsoleColor.Red;
+            colors[0] = ConsoleColor.Green;
             colors[1] = ConsoleColor.Yellow;
             colors[2] = ConsoleColor.Blue;
             colors[3] = ConsoleColor.Gray;
@@ -36,26 +36,37 @@ namespace FilesSearch
         {
             while (true)
             {
+                if (index != 6)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write("\n\t=== ===%");
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write(" Про автора ");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("%=== ===");
+                }
                 Console.ForegroundColor = colors[rndNum.Next(0, 10)];
+
                 if (index == 0)
                 {
-                    aboutAuthorText += "\n• Зинич Максим Миколайович";
+                    aboutAuthorText += "\n @@@ • Зинич Максим Миколайович \t @@@";
                 }
                 else if (index == 1)
                 {
-                    aboutAuthorText += "\n• Студент ВСП ЛФК ХПП НУХТ";
+                    aboutAuthorText += "\n @@@ • Студент ВСП ЛФК ХПП НУХТ \t @@@";
                 }
                 else if (index == 2)
                 {
-                    aboutAuthorText += "\n• Група ПК-3";
+                    aboutAuthorText += "\n @@@ • Група ПК-3 \t\t\t @@@";
                 }
                 else if (index == 3)
                 {
-                    aboutAuthorText += "\n• zip.way.dev@gmail.com";
+                    aboutAuthorText += "\n @@@ • zip.way.dev@gmail.com \t\t @@@";
                 }
                 else if (index == 6)
                 {
-                    Console.WriteLine("\n ~~~ Натисніть Enter щоб повернутись до головно меню ~~~");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n @--> Натисніть Enter щоб повернутися до головно меню.");
 
                     key = Console.ReadKey(true).Key;
                     if (key == ConsoleKey.Enter)

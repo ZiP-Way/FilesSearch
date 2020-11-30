@@ -1,15 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Threading;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace FilesSearch
+namespace FilesSearch.SearchTypes
 {
-    class SearchByName: SearchController
+    class SearchByExtension : SearchController
     {
         private FileInfo[] files = new FileInfo[999];
 
-        private string fileName;
-        
+        private string fileExtansion;
+
         private int amountOfFiles = 0;
         private int selectedOption = 0;
 
@@ -20,7 +23,7 @@ namespace FilesSearch
 
         public void Display()
         {
-            MenuBuilder.WriteHeader("Пошук за іменем файлу");
+            MenuBuilder.WriteHeader("Пошук файлів за розширенням імен");
 
             if (!isFileFounded)
             {
@@ -54,28 +57,34 @@ namespace FilesSearch
 
         private void FileNameInput()
         {
-            Console.Write("\n@--> Введіть ім'я файлу: ");
-            fileName = Console.ReadLine();
+            Console.Write("\n@--> Введіть розширення імені файлу: ");
+            fileExtansion = Console.ReadLine();
 
-            if (fileName.Replace(" ", "") == "")
+            if (fileExtansion == "")
             {
-                throw new Exception(ExceptionMessages.EmptyField);
+                throw new FormatException();
             }
 
-            header = $"Пошук файлів за іменем: ~ {fileName} ~";
+            SetDotInText(ref fileExtansion);
+
+            header = $"Пошук файлів за розширенням імен: ~ {fileExtansion} ~";
         }
 
         private void SearchFiles()
         {
-            string[] allFoundFiles = Directory.GetFiles(PathToFolder, fileName + "*", SearchOption.AllDirectories);
+            string[] allFoundFiles = Directory.GetFiles(PathToFolder, "*" + fileExtansion, SearchOption.AllDirectories);
             for (int index = 0; index < allFoundFiles.Length; index++)
             {
                 files[index] = new FileInfo(allFoundFiles[index]);
                 amountOfFiles++;
             }
-            if(amountOfFiles != 0)
+        }
+
+        private void SetDotInText(ref string fileExtansion)
+        {
+            if(fileExtansion[0] != '.')
             {
-                isFileFounded = true;
+                fileExtansion = "." + fileExtansion;
             }
         }
     }

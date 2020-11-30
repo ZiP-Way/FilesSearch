@@ -1,15 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Threading;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace FilesSearch
+namespace FilesSearch.SearchTypes
 {
-    class SearchByName: SearchController
+    class SearchByContent : SearchController
     {
         private FileInfo[] files = new FileInfo[999];
 
-        private string fileName;
-        
+        private string fileContent;
+
         private int amountOfFiles = 0;
         private int selectedOption = 0;
 
@@ -20,12 +23,12 @@ namespace FilesSearch
 
         public void Display()
         {
-            MenuBuilder.WriteHeader("Пошук за іменем файлу");
+            MenuBuilder.WriteHeader("Пошук за контентом у файлах");
 
             if (!isFileFounded)
             {
-                FileNameInput();
-                SearchFiles();
+                FileContentInput();
+                SearchContent();
             }
 
             ShowFiles(ref text, amountOfFiles, files);
@@ -52,30 +55,37 @@ namespace FilesSearch
             }
         }
 
-        private void FileNameInput()
+        private void FileContentInput()
         {
-            Console.Write("\n@--> Введіть ім'я файлу: ");
-            fileName = Console.ReadLine();
+            Console.Write("\n@--> Введіть слово(а) всередині файлу: ");
+            fileContent = Console.ReadLine();
 
-            if (fileName.Replace(" ", "") == "")
+            if (fileContent.Replace(" ", "") == "")
             {
                 throw new Exception(ExceptionMessages.EmptyField);
             }
 
-            header = $"Пошук файлів за іменем: ~ {fileName} ~";
+            header = $"Пошук за контентом у файлах. Введені дані: ~ {fileContent} ~";
         }
 
-        private void SearchFiles()
+        private void SearchContent()
         {
-            string[] allFoundFiles = Directory.GetFiles(PathToFolder, fileName + "*", SearchOption.AllDirectories);
+            string[] allFoundFiles = Directory.GetFiles(PathToFolder, "*", SearchOption.AllDirectories);
             for (int index = 0; index < allFoundFiles.Length; index++)
             {
-                files[index] = new FileInfo(allFoundFiles[index]);
-                amountOfFiles++;
-            }
-            if(amountOfFiles != 0)
-            {
-                isFileFounded = true;
+                FileInfo reserveFile = new FileInfo(allFoundFiles[index]);
+
+                StreamReader sr = new StreamReader(reserveFile.FullName, Encoding.Default);
+                string s = sr.ReadToEnd();
+                sr.Close();
+
+
+                if (s.Contains(fileContent))
+                {
+                    files[amountOfFiles] = reserveFile;
+                    amountOfFiles++;
+                }
+
             }
         }
     }

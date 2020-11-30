@@ -10,7 +10,7 @@ namespace FilesSearch
     class SearchByDate: SearchController
     {
         private FileInfo[] files = new FileInfo[999];
-        private DateTime fileDateTime;
+        private DateTime minDate, maxDate;
 
         private string header;
         private string text;
@@ -22,6 +22,8 @@ namespace FilesSearch
 
         public void Display()
         {
+            MenuBuilder.WriteHeader("Пошук за датою створення файла");
+
             if (!isFileFounded)
             {
                 FileDateInput();
@@ -63,7 +65,7 @@ namespace FilesSearch
             {
                 FileInfo file = new FileInfo(allFoundFiles[index]);
 
-                if (file.CreationTime >= fileDateTime)
+                if (file.CreationTime >= minDate && file.CreationTime <= maxDate)
                 {
                     files[amountOfFiles] = new FileInfo(allFoundFiles[index]);
                     amountOfFiles++;
@@ -72,15 +74,35 @@ namespace FilesSearch
         }
         private void FileDateInput()
         {
-            string fileDate;
+            string maxDateStr, minDateStr;
+            string[] dates;
 
-            Console.Write("Дата створення: ");
-            fileDate = Console.ReadLine();
+            Console.WriteLine("\n@--> Введіть дату створення файла.");
 
-            string[] dates = fileDate.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
-            fileDateTime = new DateTime(Convert.ToInt32(dates[0]), Convert.ToInt32(dates[1]), Convert.ToInt32(dates[2]));
+            Console.Write("\n@--> Від: ");
+            minDateStr = Console.ReadLine();
 
-            header = $"Пошук файлів за датою: ~ {fileDateTime.ToShortDateString()} б. ~";
+            if (minDateStr.Replace(" ", "") == "")
+            {
+                throw new Exception(ExceptionMessages.EmptyField);
+            }
+
+            dates = minDateStr.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+            minDate = new DateTime(Convert.ToInt32(dates[2]), Convert.ToInt32(dates[1]), Convert.ToInt32(dates[0]));
+
+
+            Console.Write("@--> До: ");
+            maxDateStr = Console.ReadLine();
+
+            if (maxDateStr.Replace(" ", "") == "")
+            {
+                throw new Exception(ExceptionMessages.EmptyField);
+            }
+
+            dates = maxDateStr.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+            maxDate = new DateTime(Convert.ToInt32(dates[2]), Convert.ToInt32(dates[1]), Convert.ToInt32(dates[0]));
+
+            header = $"Пошук файлів за датою: ~ з {minDate.ToShortDateString()} до {maxDate.ToShortDateString()} ~";
         }
     }
 }

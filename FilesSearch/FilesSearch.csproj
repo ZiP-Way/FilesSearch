@@ -44,8 +44,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AboutAuthor.cs" />
-    <Compile Include="FilesSearch.cs" />
+    <Compile Include="ExceptionMessages.cs" />
     <Compile Include="MainMenu.cs" />
+    <Compile Include="SearchTypes\SearchByContent.cs" />
+    <Compile Include="SearchTypes\SearchByExtension.cs" />
     <Compile Include="SearchTypes\SearchController.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -55,6 +57,7 @@
     <Compile Include="SearchTypes\SearchByName.cs" />
     <Compile Include="MenuBuilder.cs" />
     <Compile Include="SearchTypes\SearchBySize.cs" />
+    <Compile Include="SearchTypes\SearchDyplicates.cs" />
     <Compile Include="SortingFiles.cs" />
   </ItemGroup>
   <ItemGroup>

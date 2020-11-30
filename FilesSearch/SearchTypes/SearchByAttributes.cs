@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace FilesSearch
 {
-    class SearchByAttributes: SearchController
+    class SearchByAttributes : SearchController
     {
         private FileInfo[] files = new FileInfo[999];
         FileAttributes selectedAttribute;
-        private string directory = @"E:\TermPaper";
+        
         private string header;
         private string text;
 
@@ -53,7 +53,7 @@ namespace FilesSearch
 
         private void SearchFiles()
         {
-            string[] allFoundFiles = Directory.GetFiles(directory, "*", SearchOption.AllDirectories);
+            string[] allFoundFiles = Directory.GetFiles(PathToFolder, "*", SearchOption.AllDirectories);
             if (allFoundFiles.Length != 0)
             {
                 isFileFounded = true;
@@ -61,40 +61,30 @@ namespace FilesSearch
             for (int index = 0; index < allFoundFiles.Length; index++)
             {
                 FileInfo file = new FileInfo(allFoundFiles[index]);
-                if (selectedAttribute == 0)
+
+                FileAttributes fileAttributes = File.GetAttributes(file.FullName);
+                if ((fileAttributes & selectedAttribute) == selectedAttribute)
                 {
-                    FileInfo[] reserve = new FileInfo[999];
-                    int amountReservedFiles = 0;
-                    for(int i = 0; i < allFoundFiles.Length; i++)
-                    {
-                        reserve[i] = new FileInfo(allFoundFiles[i]);
-                        amountReservedFiles++;
-                    }
-                    FindDuplicates(reserve, amountReservedFiles);
-                    break;
-                }
-                else
-                {
-                    FileAttributes fileAttributes = File.GetAttributes(file.FullName);
-                    if ((fileAttributes & selectedAttribute) == selectedAttribute)
-                    {
-                        files[amountOfFiles] = new FileInfo(allFoundFiles[index]);
-                        amountOfFiles++;
-                    }
+                    files[amountOfFiles] = new FileInfo(allFoundFiles[index]);
+                    amountOfFiles++;
                 }
             }
         }
         private void FileAttributeInput()
         {
+            int x = 17, y = 3;
+
             selectedOption = MenuBuilder.MultipleChoice(
-                "Виберіть потрібний вам пункт: ",
+                x,
+                y,
+                "Виберіть потрібний вам пункт",
                 "",
-                "Сховані файли",
-                "Файли тільки для читання",
-                "Архівовані файли",
-                "Системні файли",
-                "Пошук дублікатів");
-            if(selectedOption == 0)
+                "     Сховані файли     ",
+                "     Системні файли     ",
+                "    Архівовані файли    ",
+                "Файли тільки для читання");
+
+            if (selectedOption == 0)
             {
                 selectedAttribute = FileAttributes.Hidden;
             }
@@ -110,33 +100,8 @@ namespace FilesSearch
             {
                 selectedAttribute = FileAttributes.System;
             }
-            else if (selectedOption == 4)
-            {
-                selectedAttribute = 0;
-                header = $"Пошук дублікатів";
-                return; // Exit from function
-            }
+            
             header = $"Пошук файлів з атрибутом: {selectedAttribute}";
-        }
-
-        private void FindDuplicates(FileInfo[] allFoundedFiles, int amountReserveredFiles)
-        {
-            for(int i = 0; i < amountReserveredFiles; i++)
-            {
-                for(int j = 0; j < amountReserveredFiles; j++)
-                {
-                    if(j == i)
-                    {
-                        continue;
-                    }
-
-                    if(allFoundedFiles[i].Name == allFoundedFiles[j].Name)
-                    {
-                        files[amountOfFiles] = allFoundedFiles[i];
-                        amountOfFiles++;
-                    }
-                }
-            }
         }
     }
 }

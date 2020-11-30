@@ -9,9 +9,6 @@ namespace FilesSearch
 {
     class SaveInformation
     {
-        private int selectionOption = 0;
-
-        private string path = "E:\\TermPaper";
         private string subPath = "SavedFiles";
         private string mainPath;
 
@@ -25,17 +22,10 @@ namespace FilesSearch
             this.header = header;
             this.text = text;
 
-            mainPath = path + "\\" + subPath + "\\Log.txt";
-            selectionOption = MenuBuilder.MultipleChoice(
-                "\n=== Шлях збереження ===\n",
-                "",
-                "Використати стандартний шлях (E:\\TermPaper)", 
-                "Вказати власний шлях");
+            SearchController.SetPathToFolder();
+            
+            mainPath = SearchController.PathToFolder + "\\" + subPath + "\\Log.txt";
 
-            if(selectionOption == 1)
-            {
-                SetPath();
-            }
             CreateFolder();
             SaveResult();
 
@@ -45,20 +35,35 @@ namespace FilesSearch
         {
             sw = new StreamWriter(mainPath, true, System.Text.Encoding.Default);
             sw.WriteLine(
-                $" ###  {header} ###\n {text}");
+                $" ###  {header} ###\n ### Дата збереження: {DateTime.Now} ###\n {text}");
             sw.Close();
 
-            Console.WriteLine("Результати пошуку успішно збережино. Натисніть Enter щоб продовжити.");
+            MessageAfterSaving();
         }
 
         private void CreateFolder()
         {
-            DirectoryInfo dirInfo = new DirectoryInfo(path);
+            DirectoryInfo dirInfo = new DirectoryInfo(SearchController.PathToFolder);
             dirInfo.CreateSubdirectory(subPath);
         }
-        private void SetPath()
+
+        private void MessageAfterSaving()
         {
-            path = Console.ReadLine();
+            Console.CursorVisible = false;
+            Console.SetCursorPosition(2,2);
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Результати пошуку успішно збережено.");
+
+            Console.SetCursorPosition(2, 3);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("Натисніть");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($" Enter ");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("щоб повернутись до головного меню.");
+            Console.ResetColor();
+            Console.ReadKey();
         }
     }
 }
